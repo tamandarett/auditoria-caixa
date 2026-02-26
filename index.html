@@ -283,7 +283,7 @@
                     <option value="Dentro do padrão">🟢 Dentro do padrão</option>
                     <option value="Pequenos ajustes necessários">🟡 Pequenos ajustes necessários</option>
                     <option value="Necessita atenção">🟠 Necessita atenção</option>
-                    <option value="Crítico">🔴 Crítico (Risco financeiro/operacional)</option>
+                    <option value="Crítico">🔴 Crítico</option>
                 </select>
             </div>
 
@@ -343,7 +343,7 @@
             }
 
             btn.disabled = true;
-            btn.innerText = "Gravando Auditoria...";
+            btn.innerText = "Enviando Dados...";
 
             const payload = {
                 loja: document.getElementById('loja').value,
