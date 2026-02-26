@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Auditoria de Caixa - Tamandaré Tintas</title>
     
+    <link rel="manifest" href="./manifest.json">
+    <meta name="theme-color" content="#D32F2F">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    
     <link rel="shortcut icon" type="image/png" href="favicon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -188,7 +192,7 @@
 <body>
     <div class="container">
         <div class="logo-container">
-            <img src="logo-tamandare.png" alt="Tamandaré Tintas" onerror="this.style.display='none'">
+            <img src="logo.png" alt="Tamandaré Tintas" onerror="this.style.display='none'">
         </div>
         
         <h1>Auditoria de Caixa</h1>
@@ -310,7 +314,7 @@
         document.getElementById('ano-atual').textContent = new Date().getFullYear();
         document.getElementById('data-auditoria').valueAsDate = new Date(); 
 
-        const SCRIPT_URL = "COLE_AQUI_A_URL_DO_SEU_APPS_SCRIPT";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyez-pI3aUUr7QuxdbE4kDacsoAw6xR4ijFJclaYbIDUVPFA0VtaD633kAWqeQYlIKK/exec";
 
         function toggleValorDif() {
             const difSim = document.querySelector('input[name="diferenca"][value="Sim"]').checked;
@@ -337,22 +341,15 @@
             e.preventDefault();
             const btn = document.getElementById('btn-enviar');
             
-            // TRAVA DE SEGURANÇA: Verificar se nenhum checkbox foi marcado
             const totalMarcados = document.querySelectorAll('input[type="checkbox"]:checked').length;
             if (totalMarcados === 0) {
                 mostrarErro("⚠️ Checklist em branco: Você precisa marcar as opções no formulário para confirmar os itens que foram conferidos.");
                 return;
             }
 
-            if (SCRIPT_URL === "COLE_AQUI_A_URL_DO_SEU_APPS_SCRIPT") {
-                mostrarErro("⚠️ O sistema de auditoria ainda não foi conectado à Planilha pelo TI.");
-                return;
-            }
-
             btn.disabled = true;
             btn.innerText = "Gravando Auditoria...";
 
-            // Coletando dados (agora focado no status da conferência)
             const payload = {
                 loja: document.getElementById('loja').value,
                 dataAuditoria: document.getElementById('data-auditoria').value,
@@ -408,6 +405,16 @@
                 btn.innerText = "Gravar Auditoria";
             }
         });
+    </script>
+    
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('./sw.js')
+            .then(reg => console.log('App PWA ativado com sucesso.'))
+            .catch(err => console.error('Erro ao ativar o App PWA:', err));
+        });
+      }
     </script>
 </body>
 </html>
