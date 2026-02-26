@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auditoria de Caixa - Tamandaré Tintas</title>
+    
+    <link rel="shortcut icon" type="image/png" href="favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --cor-primaria: #D32F2F; 
+            --cor-secundaria: #B71C1C;
+            --cor-texto: #2D3748;
+            --cor-fundo: #F4F7F6;
+            --border-color: #E2E8F0;
+            --sucesso-bg: #F0FFF4;
+            --sucesso-text: #2F855A;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--cor-fundo);
+            color: var(--cor-texto);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background-color: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            padding: 35px 30px;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto 30px auto;
+        }
+
+        .logo-container { text-align: center; margin-bottom: 25px; }
+        .logo-container img { max-width: 180px; }
+
+        h1 {
+            color: var(--cor-texto);
+            margin-bottom: 5px;
+            font-size: 22px;
+            font-weight: 700;
+            text-align: center;
+            margin-top: 0;
+        }
+        
+        p.subtitle {
+            text-align: center;
+            color: #718096;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        /* Sistema de Alertas */
+        .alerta-mensagem {
+            padding: 14px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 600;
+            font-size: 14px;
+            display: none;
+        }
+        .alerta-erro { background-color: #FFF5F5; color: #C53030; border: 1px solid #FED7D7; }
+        .alerta-sucesso { background-color: var(--sucesso-bg); color: var(--sucesso-text); border: 1px solid #C6F6D5; text-align: center; font-size: 16px;}
+
+        /* Secções do Formulário */
+        .section-title {
+            background-color: var(--cor-texto);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-size: 15px;
+            margin: 25px 0 15px 0;
+        }
+
+        .form-group { margin-bottom: 16px; text-align: left; }
+        
+        label {
+            display: block;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 6px;
+            color: #4A5568;
+        }
+
+        input[type="text"], input[type="date"], input[type="number"], select, textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 15px;
+            font-family: 'Inter', sans-serif;
+            background-color: #FFFFFF;
+            color: var(--cor-texto);
+            transition: all 0.2s ease;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--cor-primaria);
+            box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.15);
+        }
+
+        textarea { resize: vertical; min-height: 80px; }
+
+        /* Estilo Checkbox e Radios */
+        .check-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            background: #F8FAFC;
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .check-group input {
+            margin-right: 12px;
+            width: 18px;
+            height: 18px;
+            accent-color: var(--cor-primaria);
+            cursor: pointer;
+        }
+        
+        .check-group label {
+            margin-bottom: 0;
+            font-weight: 500;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .radio-container {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 10px;
+        }
+
+        /* Botão */
+        button[type="submit"], .btn-reset {
+            width: 100%;
+            padding: 14px 24px;
+            font-size: 16px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            background-color: var(--cor-primaria);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px rgba(211, 47, 47, 0.2);
+            margin-top: 20px;
+        }
+
+        button[type="submit"]:hover, .btn-reset:hover {
+            background-color: var(--cor-secundaria);
+            transform: translateY(-2px);
+        }
+
+        .footer {
+            margin-top: auto;
+            color: #A0AEC0;
+            font-size: 13px;
+            text-align: center;
+            padding-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo-container">
+            <img src="logo-tamandare.png" alt="Tamandaré Tintas" onerror="this.style.display='none'">
+        </div>
+        
+        <h1>Auditoria de Caixa</h1>
+        <p class="subtitle">Controle Gerencial - Tamandaré Tintas</p>
+
+        <div id="msg-erro" class="alerta-mensagem alerta-erro"></div>
+        <div id="msg-sucesso" class="alerta-mensagem alerta-sucesso">
+            ✅ Auditoria enviada e registrada com sucesso!<br>
+            <button class="btn-reset" onclick="resetForm()" style="margin-top:15px; background-color: #2D3748;">Fazer Nova Auditoria</button>
+        </div>
+
+        <form id="form-auditoria">
+            
+            <div class="form-group">
+                <label>Loja Auditada:</label>
+                <select id="loja" required>
+                    <option value="" disabled selected>Selecione a Loja</option>
+                    <option>02 - Morada do Sol</option>
+                    <option>05 - Visconde</option>
+                    <option>09 - Vinhedo</option>
+                    <option>10 - Conceição</option>
+                    <option>12 - Elias Fausto</option>
+                    <option>13 - Maria José</option>
+                    <option>14 - Paula Leite</option>
+                    <option>15 - Salto</option>
+                    <option>16 - Itu</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Data da Auditoria:</label>
+                <input type="date" id="data-auditoria" required>
+            </div>
+
+            <div class="form-group">
+                <label>Operadores do Caixa (Nomes):</label>
+                <input type="text" id="operadores" placeholder="Ex: João e Maria" required autocomplete="off">
+            </div>
+
+            <div class="section-title">1. Organização Física</div>
+            
+            <div class="check-group"><input type="checkbox" id="org1"><label for="org1">Área do caixa organizada</label></div>
+            <div class="check-group"><input type="checkbox" id="org2"><label for="org2">Documentos organizados corretamente</label></div>
+            <div class="check-group"><input type="checkbox" id="org3"><label for="org3">Vales e NFs em carteira separados</label></div>
+            <div class="check-group"><input type="checkbox" id="org4"><label for="org4">Sem itens pessoais espalhados</label></div>
+            
+            <div class="form-group" style="margin-top: 15px;">
+                <label>Observações sobre Organização:</label>
+                <textarea id="obs-org" placeholder="Detalhes se houver irregularidades..."></textarea>
+            </div>
+
+            <div class="section-title">2. Conferência de Valores</div>
+            
+            <div class="check-group"><input type="checkbox" id="val1"><label for="val1">Dinheiro físico conferido e bate com sistema</label></div>
+            <div class="check-group"><input type="checkbox" id="val2"><label for="val2">Registro de cobranças atualizado</label></div>
+
+            <div class="form-group" style="margin-top: 15px; background: #F8FAFC; padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
+                <label>Houve diferença de caixa?</label>
+                <div class="radio-container">
+                    <label><input type="radio" name="diferenca" value="Nao" checked onchange="toggleValorDif()"> Não</label>
+                    <label><input type="radio" name="diferenca" value="Sim" onchange="toggleValorDif()"> Sim</label>
+                </div>
+                
+                <div id="box-valor-dif" style="display: none; margin-top: 10px;">
+                    <label>Valor da Diferença (R$):</label>
+                    <input type="number" step="0.01" id="valor-dif" placeholder="0,00">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Observações sobre Valores:</label>
+                <textarea id="obs-val" placeholder="Justificativas de quebra de caixa..."></textarea>
+            </div>
+
+            <div class="section-title">3. Documentação (Amostragem: 10 unidades)</div>
+            
+            <div class="check-group"><input type="checkbox" id="doc1"><label for="doc1">Fichas / Vales corretos</label></div>
+            <div class="check-group"><input type="checkbox" id="doc2"><label for="doc2">NFs em carteira corretas</label></div>
+            <div class="check-group"><input type="checkbox" id="doc3"><label for="doc3">NFs FT corretas</label></div>
+            <div class="check-group"><input type="checkbox" id="doc4"><label for="doc4">Cadastros de clientes recentes OK</label></div>
+
+            <div class="form-group" style="margin-top: 15px;">
+                <label>Irregularidades Encontradas na Documentação:</label>
+                <textarea id="obs-doc" placeholder="Cite as NFs/Vales que estavam errados..."></textarea>
+            </div>
+
+            <div class="section-title">4. Conclusão da Auditoria</div>
+            
+            <div class="form-group">
+                <label>Classificação Geral da Loja:</label>
+                <select id="classificacao" required>
+                    <option value="" disabled selected>Selecione a classificação final</option>
+                    <option value="Dentro do padrão">🟢 Dentro do padrão</option>
+                    <option value="Pequenos ajustes necessários">🟡 Pequenos ajustes necessários</option>
+                    <option value="Necessita atenção">🟠 Necessita atenção</option>
+                    <option value="Crítico">🔴 Crítico (Risco financeiro/operacional)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Orientações passadas ao operador:</label>
+                <textarea id="orientacoes" placeholder="O que foi combinado para corrigir os erros..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Prazo para ajustes (Se houver):</label>
+                <input type="date" id="prazo-ajustes">
+            </div>
+
+            <button type="submit" id="btn-enviar">Gravar Auditoria</button>
+        </form>
+    </div>
+
+    <div class="footer">
+        © <span id="ano-atual"></span> Tamandaré Tintas. Controle Gerencial.
+    </div>
+
+    <script>
+        document.getElementById('ano-atual').textContent = new Date().getFullYear();
+        document.getElementById('data-auditoria').valueAsDate = new Date(); // Preenche data de hoje
+
+        // Endpoint do Google Apps Script (Você vai colar sua URL aqui depois)
+        const SCRIPT_URL = "COLE_AQUI_A_URL_DO_SEU_APPS_SCRIPT";
+
+        function toggleValorDif() {
+            const difSim = document.querySelector('input[name="diferenca"][value="Sim"]').checked;
+            document.getElementById('box-valor-dif').style.display = difSim ? 'block' : 'none';
+        }
+
+        function mostrarErro(msg) {
+            const box = document.getElementById('msg-erro');
+            box.innerText = msg;
+            box.style.display = 'block';
+            window.scrollTo(0,0);
+            setTimeout(() => box.style.display = 'none', 5000);
+        }
+
+        function resetForm() {
+            document.getElementById('form-auditoria').reset();
+            document.getElementById('form-auditoria').style.display = 'block';
+            document.getElementById('msg-sucesso').style.display = 'none';
+            document.getElementById('data-auditoria').valueAsDate = new Date();
+            toggleValorDif();
+        }
+
+        document.getElementById('form-auditoria').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btn-enviar');
+            
+            if (SCRIPT_URL === "COLE_AQUI_A_URL_DO_SEU_APPS_SCRIPT") {
+                mostrarErro("⚠️ O sistema de auditoria ainda não foi conectado à Planilha pelo TI.");
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerText = "Gravando Auditoria...";
+
+            // Coletando dados
+            const payload = {
+                loja: document.getElementById('loja').value,
+                dataAuditoria: document.getElementById('data-auditoria').value,
+                operadores: document.getElementById('operadores').value,
+                
+                orgFisica: [
+                    document.getElementById('org1').checked ? 'Area OK' : 'Area Desorganizada',
+                    document.getElementById('org2').checked ? 'Docs OK' : 'Docs Errados',
+                    document.getElementById('org3').checked ? 'Vales Separados' : 'Vales Misturados',
+                    document.getElementById('org4').checked ? 'Sem Itens Pessoais' : 'Com Itens Pessoais'
+                ].join(' | '),
+                obsOrg: document.getElementById('obs-org').value,
+                
+                valoresConf: [
+                    document.getElementById('val1').checked ? 'Dinheiro OK' : 'Dinheiro Errado',
+                    document.getElementById('val2').checked ? 'Cobranças OK' : 'Cobranças Desatualizadas'
+                ].join(' | '),
+                teveDiferenca: document.querySelector('input[name="diferenca"]:checked').value,
+                valorDiferenca: document.getElementById('valor-dif').value || "0",
+                obsValores: document.getElementById('obs-val').value,
+
+                documentacao: [
+                    document.getElementById('doc1').checked ? 'Fichas OK' : 'Fichas Erradas',
+                    document.getElementById('doc2').checked ? 'NFs Carteira OK' : 'NFs Carteira Erradas',
+                    document.getElementById('doc3').checked ? 'NFs FT OK' : 'NFs FT Erradas',
+                    document.getElementById('doc4').checked ? 'Cadastros OK' : 'Cadastros Errados'
+                ].join(' | '),
+                obsDoc: document.getElementById('obs-doc').value,
+
+                classificacao: document.getElementById('classificacao').value,
+                orientacoes: document.getElementById('orientacoes').value,
+                prazoAjuste: document.getElementById('prazo-ajustes').value
+            };
+
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(payload)
+                });
+
+                if(response.ok) {
+                    document.getElementById('form-auditoria').style.display = 'none';
+                    document.getElementById('msg-sucesso').style.display = 'block';
+                    window.scrollTo(0,0);
+                } else {
+                    mostrarErro("⚠️ Falha ao salvar no servidor. Tente novamente.");
+                }
+            } catch(error) {
+                mostrarErro("⚠️ Sem conexão com a internet ou erro no servidor.");
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "Gravar Auditoria";
+            }
+        });
+    </script>
+</body>
+</html>
