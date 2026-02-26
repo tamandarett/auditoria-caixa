@@ -195,12 +195,12 @@
             <img src="logo.png" alt="Tamandaré Tintas" onerror="this.src='https://via.placeholder.com/200x60?text=Auditoria+Tamandare'">
         </div>
         
-        <h1>Auditoria de Caixa</h1>
+        <h1>Controle de Caixa</h1>
         <p class="subtitle">Controle Gerencial - Tamandaré Tintas</p>
 
         <div id="msg-erro" class="alerta-mensagem alerta-erro"></div>
         <div id="msg-sucesso" class="alerta-mensagem alerta-sucesso">
-            ✅ Auditoria enviada e registrada com sucesso!<br>
+            ✅ Dados enviados e registrada com sucesso!<br>
             <button class="btn-reset" onclick="resetForm()" style="margin-top:15px; background-color: #2D3748;">Fazer Nova Auditoria</button>
         </div>
 
@@ -229,7 +229,7 @@
 
             <div class="form-group">
                 <label>Operadores do Caixa (Nomes):</label>
-                <input type="text" id="operadores" placeholder="Ex: João e Maria" required autocomplete="off">
+                <input type="text" id="operadores" placeholder="" required autocomplete="off">
             </div>
 
             <div class="section-title">1. Organização Física</div>
@@ -275,7 +275,7 @@
                 <textarea id="obs-doc" placeholder="Cite as NFs/Vales que estavam errados..."></textarea>
             </div>
 
-            <div class="section-title">4. Conclusão da Auditoria</div>
+            <div class="section-title">4. Conclusão</div>
             <div class="form-group">
                 <label>Classificação Geral da Loja:</label>
                 <select id="classificacao" required>
@@ -288,7 +288,7 @@
             </div>
 
             <div class="form-group">
-                <label>Orientações passadas ao operador:</label>
+                <label>Orientações passadas a Loja:</label>
                 <textarea id="orientacoes" placeholder="O que foi combinado para corrigir os erros..."></textarea>
             </div>
 
@@ -297,7 +297,7 @@
                 <input type="date" id="prazo-ajustes">
             </div>
 
-            <button type="submit" id="btn-enviar">Gravar Auditoria</button>
+            <button type="submit" id="btn-enviar">Gravar</button>
         </form>
     </div>
 
