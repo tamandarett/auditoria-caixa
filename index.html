@@ -126,6 +126,11 @@
             padding: 10px 15px;
             border-radius: 8px;
             border: 1px solid var(--border-color);
+            transition: background 0.2s;
+        }
+
+        .check-group:hover {
+            background: #EDF2F7;
         }
         
         .check-group input {
@@ -225,10 +230,10 @@
 
             <div class="section-title">1. Organização Física</div>
             
-            <div class="check-group"><input type="checkbox" id="org1"><label for="org1">Área do caixa organizada</label></div>
-            <div class="check-group"><input type="checkbox" id="org2"><label for="org2">Documentos organizados corretamente</label></div>
-            <div class="check-group"><input type="checkbox" id="org3"><label for="org3">Vales e NFs em carteira separados</label></div>
-            <div class="check-group"><input type="checkbox" id="org4"><label for="org4">Sem itens pessoais espalhados</label></div>
+            <div class="check-group"><input type="checkbox" id="org1"><label for="org1">Área do caixa</label></div>
+            <div class="check-group"><input type="checkbox" id="org2"><label for="org2">Organização dos documentos</label></div>
+            <div class="check-group"><input type="checkbox" id="org3"><label for="org3">Vales e NFs em carteira</label></div>
+            <div class="check-group"><input type="checkbox" id="org4"><label for="org4">Itens pessoais espalhados</label></div>
             
             <div class="form-group" style="margin-top: 15px;">
                 <label>Observações sobre Organização:</label>
@@ -237,8 +242,8 @@
 
             <div class="section-title">2. Conferência de Valores</div>
             
-            <div class="check-group"><input type="checkbox" id="val1"><label for="val1">Dinheiro físico conferido e bate com sistema</label></div>
-            <div class="check-group"><input type="checkbox" id="val2"><label for="val2">Registro de cobranças atualizado</label></div>
+            <div class="check-group"><input type="checkbox" id="val1"><label for="val1">Dinheiro físico</label></div>
+            <div class="check-group"><input type="checkbox" id="val2"><label for="val2">Registro de cobranças</label></div>
 
             <div class="form-group" style="margin-top: 15px; background: #F8FAFC; padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
                 <label>Houve diferença de caixa?</label>
@@ -249,7 +254,7 @@
                 
                 <div id="box-valor-dif" style="display: none; margin-top: 10px;">
                     <label>Valor da Diferença (R$):</label>
-                    <input type="number" step="0.01" id="valor-dif" placeholder="0,00">
+                    <input type="number" step="0.01" id="valor-dif" placeholder="Ex: -50,00 ou 10,00">
                 </div>
             </div>
 
@@ -260,10 +265,10 @@
 
             <div class="section-title">3. Documentação (Amostragem: 10 unidades)</div>
             
-            <div class="check-group"><input type="checkbox" id="doc1"><label for="doc1">Fichas / Vales corretos</label></div>
-            <div class="check-group"><input type="checkbox" id="doc2"><label for="doc2">NFs em carteira corretas</label></div>
-            <div class="check-group"><input type="checkbox" id="doc3"><label for="doc3">NFs FT corretas</label></div>
-            <div class="check-group"><input type="checkbox" id="doc4"><label for="doc4">Cadastros de clientes recentes OK</label></div>
+            <div class="check-group"><input type="checkbox" id="doc1"><label for="doc1">Fichas / Vales</label></div>
+            <div class="check-group"><input type="checkbox" id="doc2"><label for="doc2">NFs em carteira</label></div>
+            <div class="check-group"><input type="checkbox" id="doc3"><label for="doc3">NFs FT</label></div>
+            <div class="check-group"><input type="checkbox" id="doc4"><label for="doc4">Cadastros de clientes recentes</label></div>
 
             <div class="form-group" style="margin-top: 15px;">
                 <label>Irregularidades Encontradas na Documentação:</label>
@@ -303,9 +308,8 @@
 
     <script>
         document.getElementById('ano-atual').textContent = new Date().getFullYear();
-        document.getElementById('data-auditoria').valueAsDate = new Date(); // Preenche data de hoje
+        document.getElementById('data-auditoria').valueAsDate = new Date(); 
 
-        // Endpoint do Google Apps Script (Você vai colar sua URL aqui depois)
         const SCRIPT_URL = "COLE_AQUI_A_URL_DO_SEU_APPS_SCRIPT";
 
         function toggleValorDif() {
@@ -318,7 +322,7 @@
             box.innerText = msg;
             box.style.display = 'block';
             window.scrollTo(0,0);
-            setTimeout(() => box.style.display = 'none', 5000);
+            setTimeout(() => box.style.display = 'none', 6000);
         }
 
         function resetForm() {
@@ -333,6 +337,13 @@
             e.preventDefault();
             const btn = document.getElementById('btn-enviar');
             
+            // TRAVA DE SEGURANÇA: Verificar se nenhum checkbox foi marcado
+            const totalMarcados = document.querySelectorAll('input[type="checkbox"]:checked').length;
+            if (totalMarcados === 0) {
+                mostrarErro("⚠️ Checklist em branco: Você precisa marcar as opções no formulário para confirmar os itens que foram conferidos.");
+                return;
+            }
+
             if (SCRIPT_URL === "COLE_AQUI_A_URL_DO_SEU_APPS_SCRIPT") {
                 mostrarErro("⚠️ O sistema de auditoria ainda não foi conectado à Planilha pelo TI.");
                 return;
@@ -341,33 +352,33 @@
             btn.disabled = true;
             btn.innerText = "Gravando Auditoria...";
 
-            // Coletando dados
+            // Coletando dados (agora focado no status da conferência)
             const payload = {
                 loja: document.getElementById('loja').value,
                 dataAuditoria: document.getElementById('data-auditoria').value,
                 operadores: document.getElementById('operadores').value,
                 
                 orgFisica: [
-                    document.getElementById('org1').checked ? 'Area OK' : 'Area Desorganizada',
-                    document.getElementById('org2').checked ? 'Docs OK' : 'Docs Errados',
-                    document.getElementById('org3').checked ? 'Vales Separados' : 'Vales Misturados',
-                    document.getElementById('org4').checked ? 'Sem Itens Pessoais' : 'Com Itens Pessoais'
+                    document.getElementById('org1').checked ? 'Área (Conferido)' : 'Área (Não conferido)',
+                    document.getElementById('org2').checked ? 'Docs (Conferido)' : 'Docs (Não conferido)',
+                    document.getElementById('org3').checked ? 'Vales/NFs (Conferido)' : 'Vales/NFs (Não conferido)',
+                    document.getElementById('org4').checked ? 'Itens Pessoais (Conferido)' : 'Itens Pessoais (Não conferido)'
                 ].join(' | '),
                 obsOrg: document.getElementById('obs-org').value,
                 
                 valoresConf: [
-                    document.getElementById('val1').checked ? 'Dinheiro OK' : 'Dinheiro Errado',
-                    document.getElementById('val2').checked ? 'Cobranças OK' : 'Cobranças Desatualizadas'
+                    document.getElementById('val1').checked ? 'Dinheiro (Conferido)' : 'Dinheiro (Não conferido)',
+                    document.getElementById('val2').checked ? 'Cobranças (Conferido)' : 'Cobranças (Não conferido)'
                 ].join(' | '),
                 teveDiferenca: document.querySelector('input[name="diferenca"]:checked').value,
                 valorDiferenca: document.getElementById('valor-dif').value || "0",
                 obsValores: document.getElementById('obs-val').value,
 
                 documentacao: [
-                    document.getElementById('doc1').checked ? 'Fichas OK' : 'Fichas Erradas',
-                    document.getElementById('doc2').checked ? 'NFs Carteira OK' : 'NFs Carteira Erradas',
-                    document.getElementById('doc3').checked ? 'NFs FT OK' : 'NFs FT Erradas',
-                    document.getElementById('doc4').checked ? 'Cadastros OK' : 'Cadastros Errados'
+                    document.getElementById('doc1').checked ? 'Fichas (Conferido)' : 'Fichas (Não conferido)',
+                    document.getElementById('doc2').checked ? 'NFs Carteira (Conferido)' : 'NFs Carteira (Não conferido)',
+                    document.getElementById('doc3').checked ? 'NFs FT (Conferido)' : 'NFs FT (Não conferido)',
+                    document.getElementById('doc4').checked ? 'Cadastros (Conferido)' : 'Cadastros (Não conferido)'
                 ].join(' | '),
                 obsDoc: document.getElementById('obs-doc').value,
 
