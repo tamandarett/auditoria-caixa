@@ -7,9 +7,9 @@
     
     <link rel="manifest" href="./manifest.json">
     <meta name="theme-color" content="#D32F2F">
-    <link rel="apple-touch-icon" href="icon-192.png">
-    
+    <link rel="apple-touch-icon" href="favicon.png">
     <link rel="shortcut icon" type="image/png" href="favicon.png">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -192,7 +192,7 @@
 <body>
     <div class="container">
         <div class="logo-container">
-            <img src="logo.png" alt="Tamandaré Tintas" onerror="this.style.display='none'">
+            <img src="logo.png" alt="Tamandaré Tintas" onerror="this.src='https://via.placeholder.com/200x60?text=Auditoria+Tamandare'">
         </div>
         
         <h1>Auditoria de Caixa</h1>
@@ -233,19 +233,16 @@
             </div>
 
             <div class="section-title">1. Organização Física</div>
-            
             <div class="check-group"><input type="checkbox" id="org1"><label for="org1">Área do caixa</label></div>
             <div class="check-group"><input type="checkbox" id="org2"><label for="org2">Organização dos documentos</label></div>
             <div class="check-group"><input type="checkbox" id="org3"><label for="org3">Vales e NFs em carteira</label></div>
             <div class="check-group"><input type="checkbox" id="org4"><label for="org4">Itens pessoais espalhados</label></div>
-            
             <div class="form-group" style="margin-top: 15px;">
                 <label>Observações sobre Organização:</label>
                 <textarea id="obs-org" placeholder="Detalhes se houver irregularidades..."></textarea>
             </div>
 
             <div class="section-title">2. Conferência de Valores</div>
-            
             <div class="check-group"><input type="checkbox" id="val1"><label for="val1">Dinheiro físico</label></div>
             <div class="check-group"><input type="checkbox" id="val2"><label for="val2">Registro de cobranças</label></div>
 
@@ -268,7 +265,6 @@
             </div>
 
             <div class="section-title">3. Documentação (Amostragem: 10 unidades)</div>
-            
             <div class="check-group"><input type="checkbox" id="doc1"><label for="doc1">Fichas / Vales</label></div>
             <div class="check-group"><input type="checkbox" id="doc2"><label for="doc2">NFs em carteira</label></div>
             <div class="check-group"><input type="checkbox" id="doc3"><label for="doc3">NFs FT</label></div>
@@ -280,7 +276,6 @@
             </div>
 
             <div class="section-title">4. Conclusão da Auditoria</div>
-            
             <div class="form-group">
                 <label>Classificação Geral da Loja:</label>
                 <select id="classificacao" required>
